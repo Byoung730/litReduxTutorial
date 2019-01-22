@@ -24,14 +24,6 @@ class TodoView extends connect(store)(LitElement) {
     this.filter = state.filter
   }
 
-  constructor() {
-    super()
-
-    this.todos = []
-    this.filter = VisibilityFilters.SHOW_ALL
-    this.task = ''
-  }
-
   render() {
     return html`
       <style>

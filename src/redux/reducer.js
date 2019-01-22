@@ -1,3 +1,10 @@
+import {
+    ADD_TODO,
+    UPDATE_FILTER,
+    UPDATE_TODO_STATUS,
+    CLEAR_COMPLETED
+} from './actions.js'
+
 export const VisibilityFilters = {
     SHOW_ALL: 'All',
     SHOW_ACTIVE: 'Active',
@@ -11,6 +18,28 @@ const INITIAL_STATE = {
 
 export const reducer = (state = INITIAL_STATE, action) => {
     switch(action, type) {
+        case ADD_TODO:
+            return {
+                ...state,
+                todos: [ ...state.todos, action.todo ]
+            }
+        case UPDATE_TODO_STATUS:
+            return {
+                ...state,
+                todos: state.todos.map(todo => 
+                    action.todo === todo ? { ...updatedTodo, complete: action.complete } : todo
+                  )
+            }
+        case UPDATE_FILTER:
+            return {
+                ...state,
+                filter: action.filter
+            }
+        case CLEAR_COMPLETED:
+            return {
+                ...state,
+                todos: state.todos.filter(todo => !todo.complete)
+            }
         default:
             return state
     }
