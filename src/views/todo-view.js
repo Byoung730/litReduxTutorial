@@ -1,22 +1,46 @@
-import { LitElement, html } from 'lit-element';
+import {
+  LitElement,
+  html
+} from 'lit-element';
 import '@vaadin/vaadin-text-field';
 import '@vaadin/vaadin-button';
 import '@vaadin/vaadin-checkbox';
 import '@vaadin/vaadin-radio-button/vaadin-radio-button';
 import '@vaadin/vaadin-radio-button/vaadin-radio-group';
-import { connect } from 'pwa-helpers'
-import { store } from '../redux/store.js'
+import {
+  connect
+} from 'pwa-helpers'
+import {
+  store
+} from '../redux/store.js'
 
-import { VisibilityFilters, getVisibleTodosSelector } from '../redux/reducer.js'
-import { clearCompleted, updateFilter, updateTodoStatus, addTodo } from '../redux/actions.js';
+import {
+  VisibilityFilters,
+  getVisibleTodosSelector
+} from '../redux/reducer.js'
+import {
+  clearCompleted,
+  updateFilter,
+  updateTodoStatus,
+  addTodo
+} from '../redux/actions.js';
+import {
+  BaseView
+} from './base-view.js';
 
-class TodoView extends connect(store)(LitElement) {
+class TodoView extends connect(store)(BaseView) {
 
   static get properties() {
     return {
-      todos: { type: Array },
-      filter: { type: String },
-      task: { type: String }
+      todos: {
+        type: Array
+      },
+      filter: {
+        type: String
+      },
+      task: {
+        type: String
+      }
     }
   }
 
@@ -26,7 +50,7 @@ class TodoView extends connect(store)(LitElement) {
   }
 
   render() {
-    return html`
+    return html `
       <style>
         todo-view {
           display: block;
@@ -102,7 +126,7 @@ class TodoView extends connect(store)(LitElement) {
   }
 
   addTodo() {
-    if ( this.task ) {
+    if (this.task) {
       store.dispatch(addTodo(this.task))
       this.task = ''
     }
@@ -113,13 +137,9 @@ class TodoView extends connect(store)(LitElement) {
   }
 
   shortcutListener(e) {
-    if ( e.key === 'Enter' ) {
+    if (e.key === 'Enter') {
       this.addTodo()
     }
-  }
-
-  createRenderRoot() {
-    return this
   }
 }
 
