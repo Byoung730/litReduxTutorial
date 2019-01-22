@@ -12,7 +12,7 @@ export const addTodo = task => {
             id: nanoid(),
             task,
             complete: false
-        } 
+        }
     }
 }
 
@@ -25,10 +25,14 @@ export const updateTodoStatus = (todo, complete) => {
 }
 
 export const updateFilter = filter => {
-    type: UPDATE_FILTER,
-    filter
+    return {
+        type: UPDATE_FILTER,
+        filter
+    }
 }
 
 export const clearCompleted = () => {
-    type: CLEAR_COMPLETED
+    return {
+        type: CLEAR_COMPLETED
+    }
 }

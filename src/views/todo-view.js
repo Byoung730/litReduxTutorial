@@ -7,7 +7,7 @@ import '@vaadin/vaadin-radio-button/vaadin-radio-group';
 import { connect } from 'pwa-helpers'
 import { store } from '../redux/store.js'
 
-import { VisibilityFilters } from '../redux/reducer.js'
+import { VisibilityFilters, getVisibleTodosSelector } from '../redux/reducer.js'
 import { clearCompleted, updateFilter, updateTodoStatus, addTodo } from '../redux/actions.js';
 
 class TodoView extends connect(store)(LitElement) {
@@ -21,7 +21,7 @@ class TodoView extends connect(store)(LitElement) {
   }
 
   stateChanged(state) {
-    this.todos = state.todos
+    this.todos = getVisibleTodosSelector(state)
     this.filter = state.filter
   }
 
@@ -63,7 +63,7 @@ class TodoView extends connect(store)(LitElement) {
 
       <div class="todos-list">
         ${
-          this.applyFilter(this.todos).map(todo => html`
+          this.todos.map(todo => html`
           <div class="todo-item">
             <vaadin-checkbox
               ?checked="${todo.complete}"
@@ -84,7 +84,7 @@ class TodoView extends connect(store)(LitElement) {
       </vaadin-radio-group>
 
       <vaadin-button @click="${this.clearCompleted}">
-        Clear Comlpeted
+        Clear Completed
       </vaadin-button>
     `;
   }
@@ -95,17 +95,6 @@ class TodoView extends connect(store)(LitElement) {
 
   filterChanged(e) {
     store.dispatch(updateFilter(e.detail.value))
-  }
-
-  applyFilter(todos) {
-    switch ( this.filter ) {
-      case VisibilityFilters.SHOW_ACTIVE:
-        return todos.filter(todo => !todo.complete)
-      case VisibilityFilters.SHOW_COMPLETED:
-        return todos.filter(todo => todo.complete)
-      default:
-        return todos
-    }
   }
 
   updateTask(e) {
