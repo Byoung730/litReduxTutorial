@@ -4,14 +4,12 @@ import '@vaadin/vaadin-button';
 import '@vaadin/vaadin-checkbox';
 import '@vaadin/vaadin-radio-button/vaadin-radio-button';
 import '@vaadin/vaadin-radio-button/vaadin-radio-group';
+import { connect } from 'pwa-helpers'
+import { store } from '../redux/store.js'
 
-const VisibilityFilters = {
-  SHOW_ALL: 'All',
-  SHOW_ACTIVE: 'Active',
-  SHOW_COMPLETED: 'Completed'
-}
+import { VisibilityFilters } from '../redux/reducer.js'
 
-class TodoView extends LitElement {
+class TodoView extends connect(store)(LitElement) {
 
   static get properties() {
     return {
@@ -19,6 +17,11 @@ class TodoView extends LitElement {
       filter: { type: String },
       task: { type: String }
     }
+  }
+
+  stateChanged(state) {
+    this.todos = state.todos
+    this.filter = state.filter
   }
 
   constructor() {
