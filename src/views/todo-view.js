@@ -8,6 +8,7 @@ import { connect } from 'pwa-helpers'
 import { store } from '../redux/store.js'
 
 import { VisibilityFilters } from '../redux/reducer.js'
+import { clearCompleted, updateFilter, updateTodoStatus, addTodo } from '../redux/actions.js';
 
 class TodoView extends connect(store)(LitElement) {
 
@@ -51,7 +52,7 @@ class TodoView extends connect(store)(LitElement) {
       <div class="input-layout" @keyup="${this.shortcutListener}">
         <vaadin-text-field
           placeholder="Task"
-          value="${this.task}"
+          value="${this.task || ''}"
           @change="${this.updateTask}"
         ></vaadin-text-field>
         <vaadin-button
@@ -89,11 +90,11 @@ class TodoView extends connect(store)(LitElement) {
   }
 
   clearCompleted() {
-    this.todos = this.todos.filter(todo => !todo.complete)
+    store.dispatch(clearCompleted())
   }
 
   filterChanged(e) {
-    this.filter = e.target.value
+    store.dispatch(updateFilter(e.detail.value))
   }
 
   applyFilter(todos) {
@@ -113,19 +114,13 @@ class TodoView extends connect(store)(LitElement) {
 
   addTodo() {
     if ( this.task ) {
-      this.todos = [...this.todos, {
-          task: this.task,
-          complete: false
-        }
-      ]
+      store.dispatch(addTodo(this.task))
       this.task = ''
     }
   }
 
   updateTodoStatus(updatedTodo, complete) {
-    this.todos = this.todos.map(todo => 
-        updatedTodo === todo ? { ...updatedTodo, complete } : todo
-      )
+    store.dispatch(updateTodoStatus(updatedTodo, complete))
   }
 
   shortcutListener(e) {

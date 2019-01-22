@@ -17,7 +17,7 @@ const INITIAL_STATE = {
 }
 
 export const reducer = (state = INITIAL_STATE, action) => {
-    switch(action, type) {
+    switch(action.type) {
         case ADD_TODO:
             return {
                 ...state,
